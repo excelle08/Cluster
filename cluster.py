@@ -3,6 +3,21 @@
 import common
 from sys import argv
 
+configs = common.load_config()
+if not configs:
+    print 'Missing configuration file clusters.conf'
+
+if not 'username' in configs:
+    print 'Username not set.'
+    exit(1)
+
+if not 'password' in configs:
+    configs['password'] = ''
+
+if not 'slaves' in configs:
+    print 'Slaves not set.'
+    exit(1)
+
 if __name__ == '__main__':
     modules = common.load_modules()
 

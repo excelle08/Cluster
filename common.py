@@ -1,4 +1,4 @@
-import imp, os, json
+import imp, os, json, pexpect
 from modules import Command
 from inspect import isclass
 
@@ -48,4 +48,22 @@ def load_modules():
 
 
 def load_config():
-    configs = {}
+    if not os.path.isfile('./clusters.conf'):
+        return None
+
+    config_str = ''
+    with open('./clusters.conf', 'r') as f:
+        config_str = f.read()
+    return json.loads(config_str)
+
+
+def auto_passwd(command, password):
+    child = pexpect.spawn(command)
+    
+    while True:
+        code = child.expect(['assword', pexpect.EOF, pexpect.TIMEOUT])
+        if code == 0:
+            child.sendline(password)
+        else:
+            break
+
